@@ -21,6 +21,15 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/tests/aiService.test.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Greenhouse Service Test",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/tests/greenhouseService.test.js"
         }
     ]
 }

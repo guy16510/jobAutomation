@@ -1,26 +1,96 @@
-Job Title: Software Engineer
-Location: Remote
-Company: Tech Innovators Inc.
+Software Development Manager
 
-Job Description:
-We are looking for a highly skilled Software Engineer to join our team. The ideal candidate will have experience in building scalable web applications, working with modern technologies like Node.js, React, and AWS. You will be responsible for designing, developing, and maintaining our core products.
+ 
 
-Responsibilities:
-- Develop and maintain web applications using Node.js and React.
-- Collaborate with cross-functional teams to define, design, and ship new features.
-- Write clean, maintainable, and efficient code.
-- Troubleshoot and debug issues across the stack.
-- Participate in code reviews and provide constructive feedback.
+About ABC Company
 
-Requirements:
-- 3+ years of experience in software development.
-- Proficiency in JavaScript, Node.js, and React.
-- Experience with cloud platforms like AWS.
-- Strong problem-solving skills and attention to detail.
-- Excellent communication and teamwork skills.
+ABC Company™ for churches, Christian ministries, non-profits, and businesses around the world—serves 20,000+ clients, creating impactful products, and delighting the 40 million real people who use our platform every day. ABC Company is one of the fastest growing companies in the U.S. (Inc. 5,000 Fastest Growing Companies from 2020–2024) and has won awards for best mobile experience, been voted one of Seattle and Austin’s best places to work multiple years in a row, created some of the most downloaded apps of all time, and built enterprise software for world-class brands like XBOX, Microsoft, Samsung, Expedia, and Cisco; yet, at the end of the day, our passion is to equip churches to make a lasting impact in our world. Our team of 300+ mission-driven people committed to our core values of humility, innovation, and excellence has pioneered the market with over 30-firsts for the church market including the first-ever church mobile app. 
 
-Benefits:
-- Competitive salary and equity.
-- Flexible working hours and remote work options.
-- Health, dental, and vision insurance.
-- Professional development opportunities.
+Working at ABC Company is more than just a job; we are a team of people who are courageous, inventive, and passionate about doing meaningful work every day. Don’t take our word for it—head to Glassdoor and see for yourself!
+
+About the Team
+
+The Engineering Team is responsible for building and running all the products that ABC Company offers. We are a super-star team of software engineering, QA, and site reliability professionals creating polished experiences for our clients and end-users. The Engineering Team is responsible for the entire user experience including: Mobile Apps (end-user facing), ABC Company Giving, the ABC Company Dashboard CMS (client-facing), Web App, TV App, backend data feeds, analytics, SnapPages (website builder) and more. We serve thousands of clients, millions of end-users, and billions of individual app impressions.
+
+About the Role
+
+As a Software Development Manager at ABC Company, you will lead a team of 6-10 software engineers specializing in various disciplines, including backend, frontend, and mobile development. Reporting directly to the VP of Engineering, this is a hands-on leadership role where you will oversee 1-3 Scrum teams, drive technical excellence, foster team growth, and deliver exceptional software solutions. You will oversee and support your team’s growth and technical excellence, while driving projects that align with ABC Company’s strategic goals.
+
+Key Responsibilities
+
+People Management (40%)
+
+Recruit, mentor, and develop a high-performing team of software engineers.
+Set clear goals and provide regular, clear performance feedback.
+Address team health, training needs, and organizational challenges.
+Champion growth and coach career development for your team members.
+Review and approve requests for access to systems.
+Foster open communication by conducting weekly one-on-ones, addressing concerns, and providing tailored feedback.
+
+Technical Project Management (40%)
+
+Collaborate with Scrum teams to establish OKRs and execution plans.
+Support Product Managers (PMs) and Scrum Masters (SMs) during scrum ceremonies and presentations.
+Partner with PMs to balance execution of Product and Engineering priorities.
+Handle administrative tasks for the team, such as gaining approval for new technologies and costs and coordinating cross-team dependencies. Ensure larger technical requests from outside the team are clarified and prioritized, enabling engineers to focus on sprint work.
+Help to coordinate Scrum teams by ensuring they have clear goals, timelines, and resources.
+Remove cross-team impediments and align priorities with Product Management.
+Assess and prioritize trade-offs between feature delivery, reliability, and the developer experience in collaboration with Tech Leads and developers to ensure balance between deadlines, reliability, and technical excellence.
+Cultivate a team culture of trust, humility, and curiosity, empowering engineers to innovate while maintaining alignment with business goals. 
+Work with Product Managers and Owners to ensure clear acceptance criteria for assignments, user stories, and epics, collaborating with Tech Leads and developers to address gaps, ask clarifying questions, and ensure alignment before implementation
+
+Software Development/Architecture (20%)
+
+Participate in technical discussions and provide direction.
+Provide oversight regarding code design, software standards, and code review processes.
+Enforce access controls and security best practices. 
+Suggest improvements and optimizations to the construction and deployment of software according to industry best practices as new tools, practices, and standards evolve. 
+Conduct code reviews and pair programming sessions.
+Occasionally contribute code for maintenance and bug fixes.
+Support system reliability and address critical issues by participating in the on-call rotation alongside your team.
+Additional Essential Functions
+Establish and champion industry best practices for Agile software development.
+Foster collaboration with designers to ensure user delight in product delivery.
+Guide, mentor, and develop your team members, positively influencing the broader development community.
+Establish and iterate on development processes to improve the developer experience and achieve business goals.
+Maintain open communication with management on projects and coordinate with stakeholders to ensure clear communication at all stages. Quickly escalate issues to keep senior leadership informed ahead of situations that impact customers or projects.
+
+You are...
+
+Passionate: You enjoy serving the church, spreading the gospel of Jesus Christ, and growing yourself and your team professionally
+A Leader: People are willing to follow you, and seek you out for guidance and mentorship
+A Hard Worker: People would describe you as dependable, flexible, humble, teachable, and  proactive. You love getting a lot done with limited direction and basic instructions
+Trustworthy: You understand the importance of confidentiality with sensitive information
+Organized:  You enjoy a rapidly changing environment requiring frequent adjustment of roles and duties and you can easily prioritize multiple projects and tasks with great communication
+A Learner: You possess a Bachelor of Science in Computer Science or equivalent work experience
+A Problem Solver: You’re a critical thinker and have the ability to find creative solutions to complex problems
+Required Education and Experience
+6+ years of professional software development experience, including hands-on work with languages such as Go, Java, JavaScript/TypeScript, Python, or similar.
+2+ years directly managing a team of software developers.
+Proven expertise in at least one area: native mobile (Android, iOS, React Native), backend (Microservices, REST API design, distributed systems), or frontend (PWA, SPAs, modern JavaScript frameworks).
+Strong understanding and advocacy of Agile methodologies.
+Promoter of documentation with obsessive attention to detail using tools like Confluence, Jira, etc.
+Experience with relational databases, SQL, and document-oriented databases.
+Familiarity with test-driven development and CI/CD practices.
+Exceptional communication and organizational skills.
+Inspires teams to thrive with a solutions-oriented mindset, even in challenging situations.
+
+Compensation
+
+The overall compensation for this role will be between $160,000-190,000/yr.
+
+Location
+
+ABC Company currently has operations in 27 states across the US! As much as we would love to have employees in as many states and countries as we have clients, we are currently limiting hiring to the states we already operate in. As a result of that, this role is only available as a 100% remote position if you reside in one of the following states: 
+
+AL, AR, AZ, CO, FL, GA, ID, IA, IN, KS, KY, MO, MI, MN, NC, NM, OK, OH, OR, SC, SD, TN, TX, UT, VA, WA, WY.
+
+Unfortunately, if you do not reside in one of these states, we are unable to consider your application.
+
+Benefits
+
+Generous Paid Time Off (Accrual rate of 15 days for the first year and then 20 vacation days per year beginning on your 1 year anniversary), Medical Coverage, Dental Coverage, Vision Coverage, short and long term disability and life insurance all free of charge, Competitive Compensation, 401k Matching, Professional Development, Top of the Line Equipment, Referral Program, Parental Leave, Family-Friendly Culture, and the chance to work side-by-side with thought leaders in emerging tech
+
+This position is classified as Full-time/Non-Exempt and therefore is eligible for overtime pay. Primary position hours are 7:30 am to 4:30 pm Mon-Fri.
+
+Note: Employment with ABC Company is contingent upon satisfactory proof of employee’s right to work in the U.S., as required by law and upon completion of a basic background check and; Employment with ABC Company is considered “at will,” meaning that either the company or the employee may terminate the employment relationship at any time without cause or notice. ABC Company is an Equal Opportunity Employer. We value all human life as all people are created with equal dignity, value, and worth. We do not discriminate on the ground of race, color, religion, sex, age, disability or national origin, or genetic information in the hiring, retention, or promotion of employees; nor in determining their rank, or the compensation or fringe benefits paid them.

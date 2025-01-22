@@ -1,10 +1,41 @@
+const puppeteer = require("puppeteer");
+const Fuzz = require("fuzzball");
 const { getAIAnswer } = require("./aiService");
 const config = require("../config/config");
 const logger = require("../utils/logger");
 
+/**
+ * Extract the job description from the page.
+ * @param {object} page - Puppeteer page object.
+ * @returns {Promise<string>} - The job description text.
+ */
+const extractJobDescription = async (page) => {
+  try {
+    // Wait for the job description element to load
+    await page.waitForSelector("#content");
+    logger.info("Job description element found.");
+
+    // Extract the job description text
+    const jobDescription = await page.$eval("#content", (el) =>
+      el.innerText.trim()
+    );
+    logger.info("Job description extracted successfully.");
+    return jobDescription;
+  } catch (error) {
+    logger.error(`Error extracting job description: ${error.message}`);
+    throw new Error("Failed to extract job description.");
+  }
+};
+
 // Handle Greenhouse job application
 const handleGreenhouseApplication = async (page) => {
+  const filledFields = new Set(); // Track fields that have already been filled
+
   try {
+    // Extract the job description from the page
+    const jobDescription = await extractJobDescription(page);
+    logger.info("Job description:", jobDescription);
+
     // Wait for the form to load
     await page.waitForSelector("#application_form", { visible: true, timeout: 30000 });
     logger.info("Greenhouse application form loaded.");
@@ -22,13 +53,13 @@ const handleGreenhouseApplication = async (page) => {
     await handleLocationField(page);
 
     // Handle questions
-    await handleQuestions(page);
+    await handleQuestions(page, jobDescription, filledFields);
 
     // Handle cover letter
-    await handleCoverLetter(page);
+    // await handleCoverLetter(page, jobDescription);
 
     // Submit application
-    await submitApplication(page);
+    // await submitApplication(page);
 
     logger.info("Application submitted successfully.");
   } catch (error) {
@@ -38,8 +69,8 @@ const handleGreenhouseApplication = async (page) => {
 
 // Fill in personal information
 const fillPersonalInformation = async (page) => {
-  await page.type('input[name="job_application[first_name]"]', config.personalInfo.firstName);
-  await page.type('input[name="job_application[last_name]"]', config.personalInfo.lastName);
+  await page.type('input[name="job_application[first_name]"]', config.personalInfo.firstname);
+  await page.type('input[name="job_application[last_name]"]', config.personalInfo.lastname);
   await page.type('input[name="job_application[email]"]', config.personalInfo.email);
   await page.type('input[name="job_application[phone]"]', config.personalInfo.phone);
   logger.info("Filled in personal information.");
@@ -73,65 +104,165 @@ const uploadResume = async (page) => {
 
 // Handle location field
 const handleLocationField = async (page) => {
-    const locationInput = await page.$('input[name="job_application[location]"]');
-    if (locationInput) {
-      // Type the location from config
-      await locationInput.type(config.personalInfo.location);
-  
-      // Wait for the dropdown to appear
-      await page.waitForSelector("#location_autocomplete-items-popup", { visible: true, timeout: 5000 });
-  
-      // Select the first suggestion from the dropdown
-      await page.click("#location_autocomplete-items-popup li:first-child");
-      logger.info("Location selected successfully.");
+  const locationInput = await page.$('input[name="job_application[location]"]');
+  if (locationInput) {
+    // Type the location from config
+    await locationInput.type(config.personalInfo.location);
+
+    // Wait for the dropdown to appear
+    await page.waitForSelector("#location_autocomplete-items-popup", { visible: true, timeout: 5000 });
+
+    // Select the first suggestion from the dropdown
+    await page.click("#location_autocomplete-items-popup li:first-child");
+    logger.info("Location selected successfully.");
+  } else {
+    logger.warn("Location input field not found.");
+  }
+};
+// Handle cover letter
+const handleCoverLetter = async (page, jobDescription) => {
+  try {
+    // Wait for the cover letter section to load
+    await page.waitForSelector('#cover_letter_fieldset', { visible: true, timeout: 30000 });
+    logger.info("Cover letter section loaded.");
+
+    // Click the "or enter manually" button
+    const enterManuallyButton = await page.$('#cover_letter_fieldset button[data-source="paste"]');
+    if (enterManuallyButton) {
+      await enterManuallyButton.click();
+      logger.info("Clicked 'or enter manually' button.");
     } else {
-      logger.warn("Location input field not found.");
+      throw new Error("'or enter manually' button not found.");
     }
-  };
+
+    // Wait for the textarea to appear
+    await page.waitForSelector('textarea#cover_letter_text', { visible: true, timeout: 10000 });
+    logger.info("Cover letter textarea is visible.");
+
+    // Generate the cover letter using AI
+    const coverLetterPrompt = `Write a professional cover letter. Keep it short to 1-2 paragraphs. 
+    You are me, and you are applying to jobs. Write your response in first person, being humble, concise, and professional. 
+    Leverage relevant experience from my resume and align it with the job description. 
+    Do not use placeholders like [Your Name], [City, State], <COMPANY>, or any other bracketed text under any circumstances. 
+    If specific details are not provided, generalize or omit them entirely. 
+    For example:
+      - Instead of writing "I am [Your Name], located in [City, State]," write "I am excited to apply for this position."
+      - Instead of writing "I am particularly drawn to <COMPANY>," write "I am particularly drawn to this opportunity."
+    `;
+    const coverLetter = await getAIAnswer(coverLetterPrompt, jobDescription);
+    logger.info("Cover letter generated successfully.");
+
+    // Fill the generated cover letter into the textarea
+    await page.type('textarea#cover_letter_text', coverLetter);
+    logger.info("Cover letter filled into the textarea.");
+
+  } catch (error) {
+    logger.error(`Error handling cover letter: ${error.message}`);
+    throw error;
+  }
+};
 
 // Handle questions
-const handleQuestions = async (page) => {
-  const questions = await page.$$(".field");
-  for (const question of questions) {
-    const label = await question.$eval("label", (el) => el.innerText.trim());
-    const input = await question.$("input, textarea, select");
+const handleQuestions = async (page, jobDescription, filledFields) => {
+  // Get all question elements
+  const questions = await page.$$("#custom_fields .field");
 
-    if (label.includes("How did you hear about this job?")) {
-      await input.type("I found this job on Remote RocketShip.");
-    } else if (label.includes("Salary expectations")) {
-      await input.type("$190,000");
-    } else if (label.includes("Are you authorized to work in the United States?")) {
-      await input.select("Yes");
-    } else {
-      const answer = await getAIAnswer(label, "Job description not available", "Resume text not available");
-      if (await question.$("textarea")) {
-        await question.type("textarea", answer);
-      } else if (await question.$("input[type='text']")) {
-        await question.type("input[type='text']", answer);
-      } else if (await question.$("select")) {
-        await input.select(answer);
+  // Known questions and their answers (from config or hardcoded)
+  const knownQuestions = {
+    "LinkedIn Profile": config.personalInfo.linkedin,
+    "How did you hear about this job?": config.hardcodedAnswers.jobReferral,
+    "Desired Salary": config.hardcodedAnswers.salary,
+    "Do you currently reside in one of these states?": "Yes", // Assuming the answer is "Yes"
+    "Which state do you currently reside in?": config.personalInfo.state,
+    "Will you need sponsorship for an employment visa to work at Subsplash?": config.hardcodedAnswers.sponsorship,
+    "Do you have the legal right to work in the United States for Subsplash?": config.hardcodedAnswers.authorizedUS,
+  };
+
+  for (const question of questions) {
+    try {
+      // Extract the question label
+      const label = await question.$eval("label", (el) => el.innerText.trim().replace(/\s+/g, " "));
+      logger.info(`Processing question: ${label}`);
+
+      // Skip if the field has already been filled
+      if (filledFields.has(label)) {
+        logger.info(`Skipping already filled field: ${label}`);
+        continue;
       }
+
+      // Fuzzy match the label with known questions
+      let bestMatch = null;
+      let bestScore = 0;
+
+      for (const knownQuestion of Object.keys(knownQuestions)) {
+        const score = Fuzz.ratio(label.toLowerCase(), knownQuestion.toLowerCase());
+        if (score > bestScore && score > 70) {
+          // Threshold for a good match
+          bestScore = score;
+          bestMatch = knownQuestion;
+        }
+      }
+
+      if (bestMatch) {
+        // Get the answer for the matched question
+        const answer = knownQuestions[bestMatch];
+
+        // Determine the input type and fill accordingly
+        const input = await question.$("input[type='text'], textarea, select");
+        if (input) {
+          const inputType = await input.evaluate((el) => el.tagName.toLowerCase());
+
+          switch (inputType) {
+            case "input": {
+              // Handle text inputs
+              await input.type(answer);
+              logger.info(`Filled text input for: ${label}`);
+              break;
+            }
+            case "select": {
+              // Handle select2 dropdowns
+              const selectId = await input.evaluate((el) => el.id);
+              if (selectId) {
+                // Click the select2 container to open the dropdown
+                await page.click(`#s2id_${selectId}`);
+
+                // Wait for the dropdown options to appear
+                await page.waitForSelector(".select2-results li", { visible: true });
+
+                // Select the option that matches the answer
+                const options = await page.$$(".select2-results li");
+                for (const option of options) {
+                  const optionText = await option.evaluate((el) => el.innerText.trim());
+                  if (optionText.toLowerCase() === answer.toLowerCase()) {
+                    await option.click();
+                    logger.info(`Selected dropdown option for: ${label}`);
+                    break;
+                  }
+                }
+              }
+              break;
+            }
+            default: {
+              logger.warn(`Unsupported input type: ${inputType} for question: ${label}`);
+              break;
+            }
+          }
+
+          filledFields.add(label); // Mark as filled
+        } else {
+          logger.warn(`No input field found for question: ${label}`);
+        }
+      } else {
+        logger.warn(`No match found for question: ${label}`);
+      }
+    } catch (error) {
+      logger.error(`Error handling question: ${label} - ${error.message}`);
     }
   }
+
   logger.info("Answered all questions.");
 };
 
-// Handle cover letter
-const handleCoverLetter = async (page) => {
-  const coverLetterButton = await page.$('button:has-text("Cover Letter")');
-  if (coverLetterButton) {
-    await coverLetterButton.click();
-    await page.waitForSelector('textarea[name="job_application[cover_letter]"]', { visible: true });
-
-    const coverLetterPrompt = `Write a professional cover letter based on the following resume and job description:\n\nResume: Resume text not available\n\nJob Description: Job description not available`;
-    const coverLetter = await getAIAnswer(coverLetterPrompt, "Job description not available", "Resume text not available");
-
-    await page.type('textarea[name="job_application[cover_letter]"]', coverLetter);
-    logger.info("Cover letter generated and filled successfully.");
-  } else {
-    logger.warn("Cover letter button not found.");
-  }
-};
 
 // Submit application
 const submitApplication = async (page) => {

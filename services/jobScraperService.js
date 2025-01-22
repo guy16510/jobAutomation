@@ -2,6 +2,7 @@ const { launchBrowser, navigateToUrl, extractApplyLinks } = require("./puppeteer
 const { trackJobApplication } = require("./jobTrackerService");
 const { handleGreenhouseApplication } = require("./greenhouseService");
 const logger = require("../utils/logger");
+const config = require("../config/config");
 
 const scrapeJobs = async () => {
   let browser;
@@ -11,8 +12,7 @@ const scrapeJobs = async () => {
     browser = launchedBrowser;
 
     // Navigate to the job listings page
-    const url =
-      "https://www.remoterocketship.com/?page=1&sort=DateAdded&jobTitle=Software+Engineering+Manager&locations=United+States&minSalary=190000";
+    const url = config.jobAggeratorURL;
     await navigateToUrl(page, url);
 
     // Extract all "Apply" links

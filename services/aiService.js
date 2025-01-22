@@ -1,22 +1,34 @@
 const axios = require("axios");
 const config = require("../config/config");
 const logger = require("../utils/logger");
+const { parseResume } = require("../utils/resumeParser");
 
 /**
  * Get an AI-generated answer using Ollama.
  * @param {string} prompt - The prompt or question to send to the AI.
  * @param {string} jobDescription - The job description (context for the AI).
- * @param {string} resumeText - The resume text (context for the AI).
  * @returns {Promise<string>} - The AI-generated answer.
  */
-const getAIAnswer = async (prompt, jobDescription, resumeText) => {
+const getAIAnswer = async (prompt, jobDescription) => {
   try {
+    // Parse resume
+    const resumeText = await parseResume(config.resumePath);
+    logger.info("Resume parsed successfully.");
+
     // Construct the payload for the Ollama API
     const payload = {
-      model: config.ollama.model, // Use the model from config
-      prompt: `You are me, and applying to jobs, write this in first person. Use the following job description and resume text to answer the question. Write this response in first person, being humble, short and concise, and leveraging experience from the resume. Do not add anything else in your response.\n\nJob Description: ${jobDescription}\n\nResume: ${resumeText}\n\nQuestion: ${prompt}`,
-      stream: false, // Set to false to get a single response
-      options: config.ollama.options, // Use options from config
+      model: config.ollama.model,
+      prompt: `
+      Here is the job description and my resume for context:
+      Job Description: ${jobDescription}
+      Resume (my experience): ${resumeText}
+      
+      Questions: ${prompt}`,
+      stream: false,
+      options: {
+        ...config.ollama.options,
+        format: "json", // Request the response in JSON format
+      },
     };
 
     // Make the API request to Ollama
