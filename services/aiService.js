@@ -2,12 +2,8 @@ const axios = require("axios");
 const config = require("../config/config");
 const logger = require("../utils/logger");
 
-// DeepSeek API configuration
-const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"; // Replace with the actual DeepSeek API endpoint
-const DEEPSEEK_API_KEY = config.deepseekApiKey; // Ensure your API key is stored in the config
-
 /**
- * Get an AI-generated answer using DeepSeek AI.
+ * Get an AI-generated answer using Ollama.
  * @param {string} prompt - The prompt or question to send to the AI.
  * @param {string} jobDescription - The job description (context for the AI).
  * @param {string} resumeText - The resume text (context for the AI).
@@ -15,33 +11,27 @@ const DEEPSEEK_API_KEY = config.deepseekApiKey; // Ensure your API key is stored
  */
 const getAIAnswer = async (prompt, jobDescription, resumeText) => {
   try {
-    // Construct the payload for the DeepSeek API
+    // Construct the payload for the Ollama API
     const payload = {
-      model: "deepseek-chat", // Replace with the appropriate model name
-      messages: [
-        {
-          role: "system",
-          content: `You are a helpful assistant. Use the following job description and resume text to answer the user's question.\n\nJob Description: ${jobDescription}\n\nResume: ${resumeText}`,
-        },
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      max_tokens: 500, // Adjust as needed
-      temperature: 0.7, // Adjust for creativity vs. determinism
+      model: config.ollama.model, // Use the model from config
+      prompt: `You are me, and applying to jobs, write this in first person. Use the following job description and resume text to answer the question. Write this response in first person, being humble, short and concise, and leveraging experience from the resume. Do not add anything else in your response.\n\nJob Description: ${jobDescription}\n\nResume: ${resumeText}\n\nQuestion: ${prompt}`,
+      stream: false, // Set to false to get a single response
+      options: config.ollama.options, // Use options from config
     };
 
-    // Make the API request
-    const response = await axios.post(DEEPSEEK_API_URL, payload, {
+    // Make the API request to Ollama
+    const response = await axios.post(config.ollama.apiUrl, payload, {
       headers: {
-        Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
         "Content-Type": "application/json",
       },
     });
 
-    // Extract and return the AI's response
-    const aiResponse = response.data.choices[0].message.content;
+    // Extract the AI's response
+    let aiResponse = response.data.response;
+
+    // Remove the <think> section from the response
+    aiResponse = aiResponse.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
+
     logger.info("AI response generated successfully.");
     return aiResponse;
   } catch (error) {

@@ -1,0 +1,26 @@
+Job Title: Software Engineer
+Location: Remote
+Company: Tech Innovators Inc.
+
+Job Description:
+We are looking for a highly skilled Software Engineer to join our team. The ideal candidate will have experience in building scalable web applications, working with modern technologies like Node.js, React, and AWS. You will be responsible for designing, developing, and maintaining our core products.
+
+Responsibilities:
+- Develop and maintain web applications using Node.js and React.
+- Collaborate with cross-functional teams to define, design, and ship new features.
+- Write clean, maintainable, and efficient code.
+- Troubleshoot and debug issues across the stack.
+- Participate in code reviews and provide constructive feedback.
+
+Requirements:
+- 3+ years of experience in software development.
+- Proficiency in JavaScript, Node.js, and React.
+- Experience with cloud platforms like AWS.
+- Strong problem-solving skills and attention to detail.
+- Excellent communication and teamwork skills.
+
+Benefits:
+- Competitive salary and equity.
+- Flexible working hours and remote work options.
+- Health, dental, and vision insurance.
+- Professional development opportunities.
